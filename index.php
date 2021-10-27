@@ -10,10 +10,10 @@
     <h2>index.html</h2>
     <form action="calculator.php" method="post">
         <label for="num1">Enter First Number</label>
-        <input type="text" name="num1">
+        <input type="number" name="num1" step="0.01" >
         <br>
         <label for="num2">Enter Second Number</label>
-        <input type="text" name="num2">
+        <input type="number" name="num2" step="0.01">
         <br>
         <input type="submit" name="operator" value="+" />
         <input type="submit" name="operator" value="-" />
