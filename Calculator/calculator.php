@@ -44,12 +44,12 @@
         // by create a function
         function ValidateInput($num1, $num2, $operator)
         {
-            if($num1 == null)
+            if($num1 == null || !is_numeric($num1))
             {
                 echo "Invalid First Number";
                 return false;
             }
-            if($num2 == null)
+            if($num2 == null || !is_numeric($num2))
             {
                 echo "Invalid Second Number";
                 return false;
@@ -59,7 +59,6 @@
                 echo "Invalid Operator";
                 return false;
             }
-
             // check division by zero
             if($operator == "/" && $num2 == 0)
             {
@@ -93,6 +92,7 @@
             }else{
                 echo "$num1 $operator $num2 = $result" ;
             } 
+            
         } 
         
     ?>

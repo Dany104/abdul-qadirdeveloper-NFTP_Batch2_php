@@ -1,24 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>index.html</h2>
-    <form action="calculator.php" method="post">
-        <label for="num1">Enter First Number</label>
-        <input type="number" name="num1" step="0.01" >
-        <br>
-        <label for="num2">Enter Second Number</label>
-        <input type="number" name="num2" step="0.01">
-        <br>
-        <input type="submit" name="operator" value="+" />
-        <input type="submit" name="operator" value="-" />
-        <input type="submit" name="operator" value="x" />
-        <input type="submit" name="operator" value="/" />
-    </form>
-</body>
-</html>
+<?php
+    include '_include/head.php';
+?>
+<?php
+     $productName=null;
+     $Price = null;
+     $Quantity = null;
+     if(isset($_POST["num1"])){
+         $num1 = $_POST["num1"];
+     }
+     if(isset($_POST["num1"])){
+         $num2 = $_POST["num2"];
+     }
+     if(isset($_POST["num1"])){
+         $operator = $_POST["operator"];
+     }
+     if(ValidateInput()){
+         echo "Product submitted!";
+     }
+     function ValidateInput(){
+
+     }
+
+?>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Invoice</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col"><a class="btn btn-primary" href="addInvoice.php">Add Invoice</a></div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table  table-striped  table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+<?php     
+    include '_include/foot.php';
+?>
