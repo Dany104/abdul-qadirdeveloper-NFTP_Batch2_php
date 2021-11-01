@@ -1,27 +1,7 @@
 <?php
-    include '_include/head.php';
+    include_once '_include/head.php';
 ?>
-<?php
-     $productName=null;
-     $Price = null;
-     $Quantity = null;
-     if(isset($_POST["num1"])){
-         $num1 = $_POST["num1"];
-     }
-     if(isset($_POST["num1"])){
-         $num2 = $_POST["num2"];
-     }
-     if(isset($_POST["num1"])){
-         $operator = $_POST["operator"];
-     }
-     if(ValidateInput()){
-         echo "Product submitted!";
-     }
-     function ValidateInput(){
 
-     }
-
-?>
 
     <div class="container">
         <div class="row">
@@ -52,5 +32,5 @@
     </div>
 
 <?php     
-    include '_include/foot.php';
+    include_once '_include/foot.php';
 ?>
