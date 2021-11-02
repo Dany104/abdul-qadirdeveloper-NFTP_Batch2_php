@@ -4,31 +4,20 @@ include_once '_include/head.php';
 
 
 <?php
+$wrong_credentials = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // collect value of input field
-    $name = $_POST['full-name'];
+
     $email_address = $_POST['email-address'];
     $password = $_POST['password'];
-    $confirm_password = $_POST['confirm-password'];
 
-
-
-    $name_error = false;
-    $name_msg = "";
     $email_error = false;
     $email_msg = "";
     $password_error = false;
     $password_msg = "";
-    $confirm_password_error = false;
-    $confirm_email_msg = "";
 
-    if (!isset($name)) {
-        $name_error = true;
-    } else if (strlen(trim($name)) < 1) {
-        $name_error = true;
-        $name_msg = "Name cannot be empty";
-    }
+
 
     if (!isset($email_address)) {
         $email_error = true;
@@ -49,24 +38,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    if (!isset($confirm_password)) {
-        $password_error = true;
-    } else if (strlen(trim($confirm_password)) < 6) {
-        $password_error = true;
-        $password_msg = "Invalid Confirm Password";
-    }
 
+    if ($email_error || $password_error) {
+        echo "$email_msg $password_msg ";
+    } else 
+    if ($email_address == "root@root.com" && $password == "asdfasdf") {
 
-    if ($confirm_password != $password) {
-        $password_error = true;
-        $password_msg = "Password Not matching";
-    }
-
-    if ($name_error || $email_error || $password_error || $confirm_password_error) {
-        echo "$name_msg $email_msg $password_msg $confirm_email_msg ";
-    } else {
-        $url = "http://localhost/abdul-qadirdeveloper-NFTP_Batch2_php-master/index.php?token=\"SomeRandomKey\"";
+        $url = "http://localhost/abdul-qadirdeveloper-NFTP_Batch2_php-master/index.php?token=\"RandomTokenKey\"";
         header("Location: $url");
+    } else {
+        $wrong_credentials = true;
     }
 }
 
@@ -76,23 +57,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <main class="my-form">
     <div class="cotainer">
+        <div class="row  justify-content-center">
+            <?php
+
+            echo  $wrong_credentials ? '<div class="alert alert-danger" role="alert">
+    Email or Password is not valid!
+</div>' : null;
+            ?>
+        </div>
         <div class="row justify-content-center">
             <div class="col-md-8" style="margin-top: 20px;">
+
                 <div class="card">
-                    <div class="card-header">Register</div>
+                    <div class="card-header">Login</div>
                     <div class="card-body">
-                        <form name="my-form" action="register.php" method="POST">
-                            <div class="form-group row">
-                                <label for="full_name" class="col-md-4 col-form-label text-md-right">Full Name</label>
-                                <div class="col-md-6">
-                                    <input type="text" id="full_name" class="form-control" name="full-name">
-                                </div>
-                            </div>
+                        <form name="my-form" action="login.php" method="POST">
+
 
                             <div class="form-group row">
                                 <label for="email_address" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
                                 <div class="col-md-6">
-                                    <input type="email" id="email_address" class="form-control" name="email-address">
+                                    <input type="email" id="email_address" class="form-control" name="email-address" placeholder="Email Address" required>
                                 </div>
                             </div>
 
@@ -102,21 +87,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <input type="password" id="password" name="password" class="form-control">
                                 </div>
                             </div>
-
-                            <div class="form-group row">
-                                <label for="confirm-password" class="col-md-4 col-form-label text-md-right">Confirm Password</label>
-                                <div class="col-md-6">
-                                    <input type="password" id="confirm-password" name="confirm-password" class="form-control">
-                                </div>
-                            </div>
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     Register
                                 </button>
                             </div>
-                            <div class="row justify-content-center" style="margin-top: 32px;">
-                                <a href="login.php" class="link-info">Already have account? Login here</a>
+                            <div style="display: flex; justify-content: space-between;margin-top: 32px;">
+                                <div class="">
+                                    <a href="register.php" class="link-info">Don't have account? Register here</a>
+                                </div>
+                                <div class="">
+                                    <a href="resetpassword.php" class="link-info">Forgot Password</a>
+                                </div>
+
                             </div>
+
 
                     </div>
                     </form>
