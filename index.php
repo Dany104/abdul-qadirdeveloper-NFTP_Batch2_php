@@ -1,59 +1,20 @@
 <?php
     include_once '_include/head.php';
-?>
-<?php
     include_once '_include/header.php';
+    include_once 'models/InvoiceItem.php';
 ?>
 
-<?php
-    class InvoiceItem{
-        private $name;
-        private $price;
-        private $quantity;
-
-        // access modifiers Private, Public
-
-        // accessors = getter, setter
-        
-        public function getName(){
-            return $this->name;
-        }
-
-        public function setName($name){
-            $this->name = $name;
-        }
-
-        public function getPrice(){
-            return $this->price;
-        }
-
-        public function setPrice($price){
-            $this->price = $price;
-        }
-
-        public function getQuantity(){
-            return $this->quantity;
-        }
-
-        public function setQuantity($quantity){
-            $this->quantity = $quantity;
-        }
-    }
-    $usb = new InvoiceItem();  // create an instance of class InvoiceItem and assigned it to object usb
-    $usb->setName("Seget 3.0 128 GB");
-    // $usb->name = "";
-    $usb->setPrice(23.45);
-    // $usb->price = 3.0;
-    $usb->setQuantity(2);
-    // $usb->quantity = 2;
-    echo $usb->getName();
-    echo "<br>";
-    echo $usb->getPrice();
-    echo "<br>";
-    echo $usb->getQuantity();
-    echo "<br>";
+<?php   
+    
+    // we will use looping technique to print the elements of array
+    // for looping
+    $invoiceItems = [
+        new InvoiceItem("Seget 3.0 128 GB", 23.45, 2),
+        new InvoiceItem("A4Tech Mouse", 3, 1),
+        new InvoiceItem("Keyboard",5,1),
+        new InvoiceItem("100 Inch LED display",500,1)
+    ];
 ?>
-
 
 
     <div class="container">
@@ -76,7 +37,26 @@
                             <th scope="col">Total</th>
                         </tr>
                     </thead>
-
+                    <tbody>
+                        <?php for($i=0;$i<count($invoiceItems);$i++) { ?>
+                        <tr>
+                            <td><?php
+                                 echo $invoiceItems[$i]->getName();
+                            ?></td>
+                            <td><?php
+                                 echo $invoiceItems[$i]->getPrice();
+                            ?></td>
+                            <td><?php
+                                 echo $invoiceItems[$i]->getQuantity();
+                            ?></td>
+                            <td>
+                                <?php
+                                     echo $invoiceItems[$i]->getQuantity()*$invoiceItems[$i]->getPrice();
+                                ?>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
                 </table>
             </div>
 
@@ -84,9 +64,7 @@
 
     </div>
 
-    <?php     
-    include_once '_include/footer.php';
-?>
 <?php     
+    include_once '_include/footer.php';    
     include_once '_include/foot.php';
 ?>
