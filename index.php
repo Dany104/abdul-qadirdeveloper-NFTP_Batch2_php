@@ -3,7 +3,24 @@
     include_once '_include/header.php';
     include_once 'models/InvoiceItem.php';
 ?>
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbName="invoicesDB";
 
+try {
+  $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
+  // set the PDO error mode to exception
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  echo "Connected successfully";
+
+    // do your queries
+} catch(PDOException $e) {
+  echo "Connection failed: " . $e->getMessage();
+}
+  $conn = null;
+?>
 <?php   
     
     // we will use looping technique to print the elements of array
