@@ -1,5 +1,6 @@
 <?php
     include_once '_include/head.php';
+    include_once '_include/DataAccess/InvoiceItemRepository.php';
 ?>
 <?php
      $name=null;
@@ -42,6 +43,15 @@
             $quantity = $_POST["quantity"];
         }
         if(ValidateInput()){
+            // insert input values to database
+            $invoiceItem = new InvoiceItem();
+            $invoiceItem->ProductName = $name;
+            $invoiceItem->Price = $price;
+            $invoiceItem->Quantity = $quantity;
+            $invoiceItem->InvoiceId = 1;
+            $invoiceItemRepository = new InvoiceItemRepository();
+            $invoiceItems = $invoiceItemRepository->AddInvoiceItem($invoiceItem);
+
             // redirect the request to index.php
             header("location:index.php");
         }else{
