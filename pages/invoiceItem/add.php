@@ -1,6 +1,8 @@
 <?php
-    include_once '_include/head.php';
-    include_once '_include/DataAccess/InvoiceItemRepository.php';
+include_once '../../_include/head.php';
+include_once '../../_include/header.php';
+include_once '../../_include/DataAccess/InvoiceItemRepository.php';
+include_once '../../models/InvoiceItem.php';
 ?>
 <?php
      $name=null;
@@ -49,11 +51,14 @@
             $invoiceItem->Price = $price;
             $invoiceItem->Quantity = $quantity;
             $invoiceItem->InvoiceId = 1;
+            echo $invoiceItem->ProductName;
             $invoiceItemRepository = new InvoiceItemRepository();
-            $invoiceItems = $invoiceItemRepository->AddInvoiceItem($invoiceItem);
+            $success = $invoiceItemRepository->AddInvoiceItem($invoiceItem);
 
             // redirect the request to index.php
-            header("location:index.php");
+             if($success)
+                header("location:index.php?invoiceId=1");
+                
         }else{
             echo "there are errors";
             // echo "<br>";
@@ -110,5 +115,6 @@
 
     
 <?php     
-    include_once '_include/foot.php';
+include_once '../../_include/footer.php';
+include_once '../../_include/foot.php';
 ?>
