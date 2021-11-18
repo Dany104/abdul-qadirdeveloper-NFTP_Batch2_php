@@ -8,7 +8,6 @@ $invoiceId = $_GET['invoiceId'];
 $invoiceItemRepository = new InvoiceItemRepository();
 $invoiceItems = $invoiceItemRepository->getInvoiceItems($invoiceId);
 
-
 ?>
 
 
@@ -24,8 +23,8 @@ $invoiceItems = $invoiceItemRepository->getInvoiceItems($invoiceId);
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Product Name</th>
-                        <th scope="col">Quantity</th>
                         <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">Total</th>
                         <th scope="col" style="width: 111px;">
                         <a class="btn btn-primary" href="add.php"><i class="fas fa-plus"></i></a>

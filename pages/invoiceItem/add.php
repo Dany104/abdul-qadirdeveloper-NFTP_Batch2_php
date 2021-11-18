@@ -5,27 +5,25 @@ include_once '../../_include/DataAccess/InvoiceItemRepository.php';
 include_once '../../models/InvoiceItem.php';
 ?>
 <?php
-     $name=null;
-     $price = null;
-     $quantity = null;
+
+    $invoiceItem = new InvoiceItem();
      $name_error = null;
      $price_error = null;
      $quantity_error = null;
      $is_error = false;
 
      if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        function ValidateInput(){
-            global $name, $price, $quantity,
-            $name_error, $price_error, $quantity_error, $is_error;
-            if(strlen(trim($name)) <2){
+        function ValidateInput($invoiceItem){
+            global $name_error, $price_error, $quantity_error, $is_error;
+            if(strlen(trim($invoiceItem->ProductName)) <2){
                $name_error = "Invalid product name";
                $is_error = true;
             }
-            if($price < 1){
+            if($invoiceItem->Price < 1){
                 $price_error = "Invalid price";
                 $is_error = true;
             }
-            if($quantity < 1){
+            if($invoiceItem->Quantity < 1){
                 $quantity_error = "Invalid quantity";
                 $is_error = true;
             }
@@ -36,20 +34,16 @@ include_once '../../models/InvoiceItem.php';
            return true;
         }
         if(isset($_POST["name"])){
-            $name = $_POST["name"];
+            $invoiceItem->ProductName = $_POST["name"];
         }
         if(isset($_POST["price"])){
-            $price = $_POST["price"];
+            $invoiceItem->Price = $_POST["price"];
         }
         if(isset($_POST["quantity"])){
-            $quantity = $_POST["quantity"];
+            $invoiceItem->Quantity = $_POST["quantity"];
         }
-        if(ValidateInput()){
+        if(ValidateInput($invoiceItem)){
             // insert input values to database
-            $invoiceItem = new InvoiceItem();
-            $invoiceItem->ProductName = $name;
-            $invoiceItem->Price = $price;
-            $invoiceItem->Quantity = $quantity;
             $invoiceItem->InvoiceId = 1;
             echo $invoiceItem->ProductName;
             $invoiceItemRepository = new InvoiceItemRepository();
@@ -61,17 +55,8 @@ include_once '../../models/InvoiceItem.php';
                 
         }else{
             echo "there are errors";
-            // echo "<br>";
-            // echo $name_error;
-            // echo "<br>";
-            // echo $price_error;
-            // echo "<br>";
-            // echo $quantity_error;
-            // echo "<br>";
         }
-
-     }
-     
+     }   
      
 ?>
 
@@ -85,24 +70,24 @@ include_once '../../models/InvoiceItem.php';
         </div>
         <div class="row">
             <div class="col">
-                <form action="addInvoice.php" method="post">
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" value="<?php echo $name ?>" class="form-control <?php echo $name_error?'is-invalid':'' ?>" name="name" placeholder="Product Name" required>
+                        <input type="text" value="<?php echo $invoiceItem->ProductName ?>" class="form-control <?php echo $name_error?'is-invalid':'' ?>" name="name" placeholder="Product Name" required>
                         <div class="invalid-feedback">
                             <?php echo $name_error ?> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="quantity">Quantity</label>
-                        <input type="number" value="<?php echo $quantity ?>" class="form-control <?php echo $quantity_error?'is-invalid':'' ?>" name="quantity" placeholder="Product Quantity" required>
+                        <input type="number" value="<?php echo $invoiceItem->Quantity ?>" class="form-control <?php echo $quantity_error?'is-invalid':'' ?>" name="quantity" placeholder="Product Quantity" required>
                         <div class="invalid-feedback">
                             <?php echo $quantity_error ?> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="number"  value="<?php echo $price ?>" step="0.5" class="form-control <?php echo $price_error?'is-invalid':'' ?>" name="price" placeholder="Product Price" required>
+                        <input type="number"  value="<?php echo $invoiceItem->Price ?>" step="0.5" class="form-control <?php echo $price_error?'is-invalid':'' ?>" name="price" placeholder="Product Price" required>
                         <div class="invalid-feedback">
                             <?php echo $price_error ?> 
                         </div>
