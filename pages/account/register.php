@@ -1,10 +1,11 @@
 <?php
+include_once '../../Models/registerModel.php';
+include_once '../../_include/DataAccess/AccountRepository.php';
 
- 
 // Define variables and initialize with empty values
 $registerModel = new RegisterModel();
 $username_err = $password_err = $confirm_password_err = "";
- 
+$accountRepository = new AccountRepository();
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
@@ -13,30 +14,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_err = "Please enter a username.";
     } elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
         $username_err = "Username can only contain letters, numbers, and underscores.";
-    } else{
-        // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = :username";
-        
-        if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-            
-            // Set parameters
-            $param_username = trim($_POST["username"]);
-            
-            // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                if($stmt->rowCount() == 1){
-                    $username_err = "This username is already taken.";
-                } else{
-                    $username = trim($_POST["username"]);
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-
-            // Close statement
-            unset($stmt);
+    } else{        
+        $username = trim($_POST["username"]);
+        $user = $accountRepository->getUserByUsername($username);
+        if($suer != null){
+            $username_err = "This username is already taken.";
         }
     }
     
@@ -62,29 +44,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
-        // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (:username, :password)";
-         
-        if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-            $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
-            
-            // Set parameters
-            $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-            
-            // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                // Redirect to login page
-                header("location: login.php");
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-
-            // Close statement
-            unset($stmt);
-        }
+        $param_password = password_hash($password, PASSWORD_DEFAULT);
+        $accountRepository->createUser($username, $param_password);
+        // Redirect to login page
+        header("location: login.php");    
     }
     
     // Close connection

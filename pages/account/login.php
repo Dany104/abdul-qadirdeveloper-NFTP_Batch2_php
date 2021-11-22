@@ -4,16 +4,18 @@ session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: welcome.php");
+    header("location: /nftp2/pages/invoiceItem/index.php");
     exit;
 }
  
-// Include config file
-require_once "config.php";
+include_once '../../_include/DataAccess/AccountRepository.php';
+include_once '../../Models/loginModel.php';
+
  
 // Define variables and initialize with empty values
-$username = $password = "";
+$loginModel = new LoginModel();
 $username_err = $password_err = $login_err = "";
+$accountRepository = new AccountRepository();
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -22,82 +24,46 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter username.";
     } else{
-        $username = trim($_POST["username"]);
+        $loginModel->username = trim($_POST["username"]);
     }
     
     // Check if password is empty
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter your password.";
     } else{
-        $password = trim($_POST["password"]);
+        $loginModel->password = trim($_POST["password"]);
     }
     
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
-        // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = :username";
-        
-        if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-            
-            // Set parameters
-            $param_username = trim($_POST["username"]);
-            
-            // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                // Check if username exists, if yes then verify password
-                if($stmt->rowCount() == 1){
-                    if($row = $stmt->fetch()){
-                        $id = $row["id"];
-                        $username = $row["username"];
-                        $hashed_password = $row["password"];
-                        if(password_verify($password, $hashed_password)){
-                            // Password is correct, so start a new session
-                            session_start();
-                            
-                            // Store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;                            
-                            
-                            // Redirect user to welcome page
-                            header("location: welcome.php");
-                        } else{
-                            // Password is not valid, display a generic error message
-                            $login_err = "Invalid username or password.";
-                        }
-                    }
-                } else{
-                    // Username doesn't exist, display a generic error message
-                    $login_err = "Invalid username or password.";
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
+        // Set parameters
+        $param_username = trim($_POST["username"]);
+        $user = $accountRepository->getUserByUsername($param_username);
+        if($user != null){
+            if(password_verify($loginModel->password, $user->password)){
+                // Password is correct, so start a new session
+                session_start();
+                 // Store data in session variables
+                 $_SESSION["loggedin"] = true;
+                 $_SESSION["id"] = $user->id;
+                 $_SESSION["username"] = $loginModel->username;   
 
-            // Close statement
-            unset($stmt);
+                 header("location: /nftp2/pages/invoiceItem/index.php");
+            } else{
+                // Password is not valid, display a generic error message
+                $login_err = "Invalid username or password.";
+            }
+        }else{
+            // Username doesn't exist, display a generic error message
+            $login_err = "Invalid username or password.";
         }
     }
-    
-    // Close connection
-    unset($pdo);
 }
 ?>
  
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 360px; padding: 20px; }
-    </style>
-</head>
-<body>
+ <?php 
+    include_once '../../_include/head.php';
+ ?>
     <div class="wrapper">
         <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>
@@ -111,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
+                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $loginModel->username; ?>">
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
             </div>    
             <div class="form-group">
@@ -125,5 +91,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
         </form>
     </div>
-</body>
-</html>
+<?php     
+include_once '../../_include/foot.php';
+?>

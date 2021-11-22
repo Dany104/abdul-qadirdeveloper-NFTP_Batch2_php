@@ -1,8 +1,9 @@
 
 <?php
-class RegisterModel {
-    public $username = "";
-    public $password = "";
-    public $confirm_password = "";    
+include_once "loginModel.php";
+
+
+class RegisterModel extends LoginModel {
+    public $confirm_password;    
 }
 ?>

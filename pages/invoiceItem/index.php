@@ -1,8 +1,11 @@
+
+
 <?php
+include_once '../../_include/authenticate.php';
 include_once '../../_include/head.php';
 include_once '../../_include/header.php';
 include_once '../../_include/DataAccess/InvoiceItemRepository.php';
-include_once '../../models/InvoiceItem.php';
+include_once '../../Models/InvoiceItem.php';
 
 $invoiceId = $_GET['invoiceId'];
 $invoiceItemRepository = new InvoiceItemRepository();

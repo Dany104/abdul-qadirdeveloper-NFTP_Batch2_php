@@ -2,7 +2,7 @@
 include_once 'database.php';
 include_once '../../models/User.php';
 
-class AccoutRepository{
+class AccountRepository{
     public function getUserByUsername($username){
         $db = new Database();
 
@@ -21,6 +21,32 @@ class AccoutRepository{
         }
         $conn = null;
 
-        return $users[0];        
+        return count($users) >0 ? $users[0]:null;        
+    }
+
+    public function createUser($username, $password){
+        $db = new Database();
+
+        try {
+            $conn = $db->getConnection();
+
+            $sql = "INSERT INTO `users`( `username`, `password`) 
+            VALUES (:username,:pwd)";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':pwd', $password);
+
+            if($stmt->execute()){
+                return true;
+            }else{
+                return false;
+            }
+
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            echo $e->getLine();
+        }
+        $conn = null;
     }
 }
