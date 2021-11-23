@@ -36,8 +36,8 @@
       </li>
 
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+    <form action="/nftp2/logout.php" method="post" class="form-inline my-2 my-lg-0">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
     </form>
   </div>
 </nav>
