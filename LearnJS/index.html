@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn JavaScript</title>
+</head>
+<body>
+    <h1>Learn Javascript</h1>
+    <p>sfdfds</p>
+    <p id="myTargetParagraph">show here</p>
+    <p>show there</p>
+    <p>show everywhere</p>
+    <button id="testButton" type="button" onclick="playmagic()" >Play a magic</button>
+    <script language="JavaScript">
+        
+        async function playmagic(){
+            var paragraph = document.getElementById("myTargetParagraph");
+            //console.log(paragraph);
+            if(paragraph != null){
+                var button = document.getElementById("testButton");
+                button.disabled = true;
+                paragraph.innerHTML = "my realy magic";
+                paragraph.style.fontWeight = "bold";
+                paragraph.style.color = "red";
+                var counter = 0;
+                setInterval(function(){
+                    counter+=10;
+                    console.log(counter);
+                    paragraph.style.marginTop = counter+"px";
+                },1000);
+                /*for(var i=0;i<1000;i++){
+                   
+                    var m = 100+i;
+                    paragraph.style.marginTop = m+"px";
+                }*/
+            }else{
+                alert('paragraph with id = myTargetParagraph does not exixsts');
+            }
+            /*var paragraphs = document.getElementsByTagName("p");
+            console.log('hello developer');
+            console.log(paragraphs);
+            paragraphs[1].innerText = "This is a magic";*/
+        }
+        let a = 23;
+        /*
+        a = "abdul";
+        a = "bla bla"; 
+        */
+        let b = 24;
+        answer = a + b;
+        
+        //console.error('this is an error');
+        //console.warn('this is a warning');
+        //alert('Hello World! ' + answer);
+    </script>
+</body>
+</html>
