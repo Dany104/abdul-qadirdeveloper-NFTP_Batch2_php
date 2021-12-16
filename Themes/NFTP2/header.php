@@ -23,8 +23,20 @@
       }
     </style>
     <!-- Custom styles for this template -->
-    <link href="wp-content/themes/nftp2/assets/styles/nftpstyles.css" rel="stylesheet">
-
+    <link href="<?php bloginfo("stylesheet_directory"); ?>/assets/styles/nftpstyles.css" rel="stylesheet">
 </head>
 <body>
     <?php wp_body_open(); ?>
+    <!-- <?php echo get_stylesheet_uri(); ?>
+    <br>
+    <?php echo get_stylesheet_directory_uri(); ?>
+    <br/>
+    <?php echo get_stylesheet_directory(); ?>
+    <br>
+    <?php echo get_stylesheet(); ?> -->
+    <?php wp_nav_menu( [ 
+      'theme_location' => 'header-menu',
+      'container'=>'nav',
+      'container_class'      => 'site-header sticky-top py-1',
+      'items_wrap'           => '<div id="%1$s" class="%2$s container d-flex flex-column flex-md-row justify-content-between">%3$s</ul>',
+    ] ); ?>
